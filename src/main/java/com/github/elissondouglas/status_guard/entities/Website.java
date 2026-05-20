@@ -24,6 +24,7 @@ public class Website implements Serializable {
     private Status lastStatus;
 
     private LocalDateTime lastVerification;
+    private Integer totalAttempts = 0;
 
     public Website() {
     }
@@ -75,6 +76,14 @@ public class Website implements Serializable {
 
     public void setLastVerification(LocalDateTime lastVerification) {
         this.lastVerification = lastVerification;
+    }
+
+    public Integer getTotalAttempts() {
+        return totalAttempts;
+    }
+
+    public void setTotalAttempts(Integer totalAttempts) {
+        this.totalAttempts = totalAttempts;
     }
 
     @Override

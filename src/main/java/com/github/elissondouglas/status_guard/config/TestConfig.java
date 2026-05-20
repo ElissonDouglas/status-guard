@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Configuration
 @Profile("test")
@@ -20,10 +21,11 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Website w1 = new Website(null, "https://www.google.com/", "Google", Status.OFFLINE, LocalDateTime.now());
+        Website w1 = new Website(null, "https://www.google.com/", "Google", Status.UNKNOWN, LocalDateTime.now());
 
+        Website w2 = new Website(null, "https://www.Outlook.com", "Outlook", Status.UNKNOWN, LocalDateTime.now());
 
-        websiteRepository.save(w1);
+        websiteRepository.saveAll(List.of(w1, w2));
 
 
     }

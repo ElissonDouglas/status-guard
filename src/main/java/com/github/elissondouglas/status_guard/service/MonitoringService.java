@@ -22,7 +22,7 @@ public class MonitoringService {
         return repository.findAll();
     }
 
-    @Scheduled(fixedRate = 68000)
+    @Scheduled(fixedRate = 34000)
     public void verifyWebsite() {
         List<Website> websites = findAll();
 
@@ -32,13 +32,20 @@ public class MonitoringService {
                 ResponseEntity responseEntity = restTemplate.getForEntity(website.getUrl(), String.class);
                 if (responseEntity.getStatusCode().is2xxSuccessful()) {
                     website.setLastStatus(Status.ONLINE);
+                    website.setTotalAttempts(0);
                     website.setLastVerification(LocalDateTime.now());
                     repository.save(website);
                 }
             } catch (RuntimeException e) {
-                website.setLastStatus(Status.OFFLINE);
-                website.setLastVerification(LocalDateTime.now());
+                website.setTotalAttempts(website.getTotalAttempts() + 1);
+
+                if (website.getTotalAttempts() >= 3) {
+                    website.setLastStatus(Status.OFFLINE);
+                    website.setLastVerification(LocalDateTime.now());
+                }
+
                 repository.save(website);
+
             }
         }
     }

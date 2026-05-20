@@ -20,7 +20,7 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Website w1 = new Website(null, "google.com", "Google", Status.ONLINE, LocalDateTime.now());
+        Website w1 = new Website(null, "https://www.google.com/", "Google", Status.OFFLINE, LocalDateTime.now());
 
 
         websiteRepository.save(w1);

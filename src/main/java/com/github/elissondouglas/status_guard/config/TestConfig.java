@@ -23,7 +23,7 @@ public class TestConfig implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Website w1 = new Website(null, "https://www.google.com/", "Google", Status.UNKNOWN, LocalDateTime.now());
 
-        Website w2 = new Website(null, "https://www.Outlook.com", "Outlook", Status.UNKNOWN, LocalDateTime.now());
+        Website w2 = new Website(null, "https://www.Outlook.com", "Outlook", Status.ONLINE, LocalDateTime.now());
 
         websiteRepository.saveAll(List.of(w1, w2));
 

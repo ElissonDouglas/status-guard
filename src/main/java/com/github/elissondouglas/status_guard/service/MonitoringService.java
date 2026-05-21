@@ -28,7 +28,7 @@ public class MonitoringService {
         return repository.findAll();
     }
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 34000)
     public void verifyWebsite() {
         List<Website> websites = findAll();
 

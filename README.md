@@ -1,35 +1,36 @@
 # 🚨 StatusGuard
 
-O **StatusGuard** é um sistema de monitoramento automático de saúde de serviços web (APIs) desenvolvido em Spring Boot. Ele verifica periodicamente a disponibilidade de URLs cadastradas, gerencia falhas de conexão de forma resiliente para evitar alarmes falsos e envia notificações em tempo real para um canal do Discord caso um serviço fique totalmente offline.
+O **StatusGuard** é um sistema de monitoramento automático de integridade de serviços web (APIs) desenvolvido em Spring Boot. O sistema realiza varreduras periódicas em URLs cadastradas, gerencia instabilidades de forma resiliente para evitar alarmes falsos e integra-se com Webhooks do Discord para notificações em tempo real.
 
 ## 🚀 Tecnologias Utilizadas
 
-- **Java 25** (ou a versão indicada no seu pom.xml)
+- **Java 25**
 - **Spring Boot 4.0.6**
-    - Spring Data JPA (Persistência de dados)
-    - Spring Scheduler (Tarefas agendadas e assíncronas)
-- **H2 Database** (Banco de dados em memória para testes)
-- **RestTemplate** (Comunicação HTTP e integração com APIs externas)
-- **Discord Webhooks** (Sistema de alertas em tempo real)
+  - Spring Data JPA (Persistência de dados)
+  - Spring Scheduler (Execução de rotinas assíncronas)
+- **H2 Database** (Banco de dados em memória para ambiente de testes)
+- **RestTemplate** (Comunicação HTTP e consumo de APIs externas)
+- **Discord Webhooks** (Disparo de alertas em tempo real)
 
-## 🛠️ Funcionalidades
+## 🛠️ Funcionalidades e Arquitetura
 
-- **Monitoramento Automatizado:** Varredura periódica configurada via `@Scheduled` para testar o status HTTP de múltiplos serviços.
-- **Mecanismo de Resiliência (Retry):** O sistema tolera instabilidades temporárias de rede. Um serviço só é marcado como `OFFLINE` se falhar 3 vezes consecutivas.
-- **Alertas Inteligentes:** Integração com o Discord que dispara notificações contendo a identificação do serviço instável apenas no momento exato da alteração do status.
-- **API REST Exposta:** Endpoint `/api/websites` que permite consultar o estado atual e o histórico de todas as aplicações monitoradas.
+- **Transição de Estados Segura:** Os serviços são inicializados com o status `UNKNOWN`. O sistema evita alarmes falsos logo no primeiro ciclo caso a API cadastrada enfrente instabilidades momentâneas.
+- **Mecanismo de Resiliência (Retry Pattern):** Um serviço monitorado só é marcado definitivamente como `OFFLINE` após registrar 3 falhas consecutivas na verificação.
+- **Tratamento de Erros HTTP:** A camada de serviço captura especificamente exceções de resposta de erro vindas do servidor remoto (como HTTP 500), garantindo o incremento correto do contador de tentativas.
+- **Alertas Inteligentes:** Notificações via Discord são acionadas apenas no momento exato em que a alteração crítica de status (de `ONLINE` para `OFFLINE`) é validada.
+- **API REST Exposta:** Endpoint `/api/websites` configurado para retornar a lista completa, histórico de tentativas e a última verificação dos serviços.
 
 ## 📦 Como Executar o Projeto
 
 ### Pré-requisitos
-- Java JDK instalado
-- Maven instalado (ou utilizar o wrapper `./mvnw`)
+- Java JDK 25 instalado
+- Maven instalado (ou utilização do wrapper `./mvnw`)
 
 ### Configuração da Variável de Ambiente
-Para manter a segurança do sistema, a URL do Webhook do Discord é injetada dinamicamente através de variáveis de ambiente.
+A URL do Webhook do Discord é injetada dinamicamente por questões de segurança.
 
-1. Configure a variável `DISCORD_WEBHOOK_URL` no seu sistema operacional ou na sua IDE (ex: IntelliJ IDEA em *Edit Configurations -> Environment Variables*).
-2. Execute a aplicação utilizando o Maven:
+1. Configure a variável de ambiente `DISCORD_WEBHOOK_URL` no seu sistema operacional ou na sua IDE (IntelliJ IDEA: *Edit Configurations -> Environment Variables*).
+2. Execute a aplicação via terminal:
 
 ```bash
 ./mvnw spring-boot:run

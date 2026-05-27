@@ -21,9 +21,10 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Website w1 = new Website(null, "https://www.google.com/", "Google", Status.UNKNOWN, LocalDateTime.now());
+        Website w1 = new Website(null, "https://httpbin.org/status/500", "Httpbin-status-500", Status.UNKNOWN, LocalDateTime.now());
 
-        Website w2 = new Website(null, "https://www.Outlook.com", "Outlook", Status.ONLINE, LocalDateTime.now());
+        Website w2 = new Website(null, "https://httpbin.org/status/200", "Httptest-status-200", Status.UNKNOWN, LocalDateTime.now());
+
 
         websiteRepository.saveAll(List.of(w1, w2));
 

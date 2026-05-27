@@ -17,7 +17,7 @@ public enum Status {
         return code;
     }
 
-    private static Status valueOf(int code) {
+    private static Status valueFromCode(int code) {
         for (Status value : Status.values()) {
             if (value.getCode() == code) {
                 return value;
